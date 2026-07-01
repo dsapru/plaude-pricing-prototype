@@ -1,0 +1,642 @@
+<!-- Copyright Deepit Sapru · Made for Plaud AI -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plaud AI - Pricing</title>
+    <style>
+        :root {
+            --purple: #6C5CE7;
+            --bg: #ffffff;
+            --text-main: #111111;
+            --text-muted: #666666;
+            --border: #eaeaea;
+            --card-bg: #f9f9f9;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.5;
+            padding: 60px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        h1, h2, h3, h4 { font-weight: 600; }
+        .hero { text-align: center; margin-bottom: 40px; }
+        .hero h1 { font-size: 3rem; margin-bottom: 16px; letter-spacing: -0.02em; }
+        .hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        /* Toggles */
+        .toggle-group {
+            display: inline-flex;
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 4px;
+            border: 1px solid var(--border);
+        }
+        .toggle-btn {
+            border: none;
+            background: transparent;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        .toggle-btn.active {
+            background: white;
+            color: var(--text-main);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* Slider */
+        .slider-container {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        input[type=range] {
+            width: 100%;
+            accent-color: var(--purple);
+            margin-bottom: 16px;
+            cursor: pointer;
+        }
+        .verdict {
+            font-size: 0.9rem;
+            color: var(--purple);
+            font-weight: 600;
+            background: rgba(108, 92, 231, 0.1);
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+        }
+
+        /* Team Stepper Area */
+        .team-controls-wrapper {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            display: none;
+        }
+        .team-active .team-controls-wrapper { display: block; }
+        .team-active .slider-container { display: none; }
+        .stepper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+        .stepper-btn {
+            width: 32px; height: 32px;
+            border-radius: 8px; border: 1px solid var(--border);
+            background: white; font-size: 1.2rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-main);
+        }
+        .stepper-btn:hover { background: var(--card-bg); }
+        .stepper-input {
+            width: 60px; text-align: center; font-size: 1.2rem; font-weight: 600;
+            border: none; background: transparent;
+        }
+        .stepper-input:focus { outline: none; }
+        .team-promo { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* Grid */
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 60px;
+            align-items: stretch;
+        }
+        .team-active .plans-grid {
+            grid-template-columns: repeat(2, 1fr);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Card */
+        .card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        .card.recommended {
+            border: 2px solid var(--purple);
+            box-shadow: 0 8px 24px rgba(108, 92, 231, 0.1);
+        }
+        .rec-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--purple);
+            color: white;
+            font-size: 0.75rem;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: none;
+        }
+        .card.recommended .rec-badge {
+            display: block;
+        }
+        .card-header { margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 24px;}
+        .card-title { font-size: 1.2rem; margin-bottom: 8px; font-weight: 600; }
+        .capacity-hrs { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em;}
+        .capacity-min { font-size: 0.9rem; color: var(--text-muted); display: block; margin-top: 4px;}
+        
+        .price-section { margin-bottom: 24px; min-height: 80px;}
+        .price-wrap { display: flex; align-items: baseline; gap: 4px; margin-bottom: 4px; flex-wrap: wrap;}
+        .price { font-size: 2.5rem; font-weight: 700; letter-spacing: -0.02em;}
+        .price-period { font-size: 1rem; color: var(--text-muted); }
+        .billed-today { font-size: 0.85rem; color: var(--text-muted); display: none; }
+        
+        .savings-pill {
+            background: #F3F0FF;
+            color: var(--purple);
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-left: 8px;
+            display: none;
+        }
+
+        .annual-active .billed-today { display: block; }
+        .annual-active .savings-pill { display: inline-block; }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-primary { background: var(--text-main); color: white; }
+        .btn-primary:hover { background: #333; }
+        .btn-secondary { background: white; color: var(--text-main); border: 1px solid var(--border); }
+        .btn-secondary:hover { background: var(--card-bg); }
+        .card.recommended .btn-secondary { background: var(--purple); color: white; border-color: var(--purple);}
+        .card.recommended .btn-secondary:hover { background: #5a4bd1; }
+
+        .features { list-style: none; margin-top: 24px; margin-bottom: 24px; flex-grow: 1;}
+        .features li { margin-bottom: 12px; font-size: 0.95rem; color: var(--text-main); display: flex; align-items: start; gap: 10px; }
+        .features li::before { content: "✓"; color: var(--purple); font-weight: bold; }
+
+        /* Safety Cards */
+        .safety-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        .team-active .safety-grid { grid-template-columns: repeat(2, 1fr); max-width: 800px; margin-left: auto; margin-right: auto;}
+        .safety-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+        }
+        .safety-card h3 { margin-bottom: 12px; font-size: 1.1rem; }
+        .safety-card p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6;}
+        .topup-chip {
+            display: inline-block;
+            background: white;
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .safety-card a { color: var(--text-main); font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--text-main); padding-bottom: 1px;}
+        .safety-card a:hover { color: var(--purple); border-color: var(--purple); }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            padding-top: 32px;
+        }
+
+        /* Attribution */
+        #plaud-attribution {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: white;
+            color: var(--text-main);
+            padding: 10px 16px;
+            border-radius: 24px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            border: 1px solid var(--border);
+            z-index: 9999;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        #plaud-attribution:hover { transform: translateY(-2px); }
+
+        .hidden { display: none !important; }
+
+        @media (max-width: 768px) {
+            .plans-grid, .team-active .plans-grid, .safety-grid, .team-active .safety-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="annual-active">
+
+    <div class="hero">
+        <h1>Every plan includes full Plaud Intelligence</h1>
+        <p>Plans differ only by capacity. Find the right fit for your notes.</p>
+    </div>
+
+    <div class="controls">
+        <div class="toggle-group" id="audience-toggle">
+            <button class="toggle-btn active" data-view="me">For me</button>
+            <button class="toggle-btn" data-view="team">For my team</button>
+        </div>
+
+        <div class="toggle-group" id="billing-toggle">
+            <button class="toggle-btn" data-billing="monthly">Pay Monthly</button>
+            <button class="toggle-btn active" data-billing="annual">Pay Annually</button>
+        </div>
+
+        <div class="slider-container" id="usage-slider-area">
+            <div class="slider-header">
+                <span>How much do you record?</span>
+                <span id="slider-val-display">2 hrs / week</span>
+            </div>
+            <input type="range" id="usage-slider" min="0" max="30" value="2" step="1">
+            <div class="verdict" id="slider-verdict">That's ~9 hrs/month → we'd recommend Pro</div>
+        </div>
+
+        <div class="team-controls-wrapper" id="team-stepper-area">
+            <div style="font-weight: 500; margin-bottom: 8px;">Team Size</div>
+            <div class="stepper">
+                <button class="stepper-btn" id="stepper-minus">-</button>
+                <input type="number" class="stepper-input" id="stepper-input" min="2" max="50" value="5">
+                <button class="stepper-btn" id="stepper-plus">+</button>
+            </div>
+            <div class="team-promo">Launch offer: $35/$25 standard pricing applies after Aug 31, 2026.</div>
+        </div>
+    </div>
+
+    <!-- Personal Plans -->
+    <div class="plans-grid" id="personal-grid">
+        <!-- Starter -->
+        <div class="card" id="card-starter">
+            <div class="rec-badge">Recommended</div>
+            <div class="card-header">
+                <div class="card-title">Starter</div>
+                <div class="capacity-hrs">5 hrs / month</div>
+                <div class="capacity-min">300 minutes</div>
+            </div>
+            <div class="price-section">
+                <div class="price-wrap">
+                    <span class="price">Free</span>
+                </div>
+                <div class="price-period">Included with device</div>
+            </div>
+            <button class="btn btn-secondary">Current Plan</button>
+        </div>
+
+        <!-- Pro -->
+        <div class="card recommended" id="card-pro">
+            <div class="rec-badge">Recommended</div>
+            <div class="card-header">
+                <div class="card-title">Pro</div>
+                <div class="capacity-hrs">20 hrs / month</div>
+                <div class="capacity-min">1,200 minutes</div>
+            </div>
+            <div class="price-section">
+                <div class="price-wrap">
+                    <span class="price" data-monthly="$17.99" data-annual="$8.33">$8.33</span>
+                    <span class="price-period">/ mo</span>
+                    <span class="savings-pill">Save 54%</span>
+                </div>
+                <div class="billed-today" data-monthly="" data-annual="Billed today: $99.99/year">Billed today: $99.99/year</div>
+            </div>
+            <button class="btn btn-secondary">Upgrade to Pro</button>
+        </div>
+
+        <!-- Unlimited -->
+        <div class="card" id="card-unlimited">
+            <div class="rec-badge">Recommended</div>
+            <div class="card-header">
+                <div class="card-title">Unlimited</div>
+                <div class="capacity-hrs">Unlimited hrs</div>
+                <div class="capacity-min">Unlimited minutes</div>
+            </div>
+            <div class="price-section">
+                <div class="price-wrap">
+                    <span class="price" data-monthly="$29.99" data-annual="$19.99">$19.99</span>
+                    <span class="price-period">/ mo</span>
+                    <span class="savings-pill">Save 33%</span>
+                </div>
+                <div class="billed-today" data-monthly="" data-annual="Billed today: $239.99/year">Billed today: $239.99/year</div>
+            </div>
+            <button class="btn btn-secondary">Upgrade to Unlimited</button>
+        </div>
+    </div>
+
+    <!-- Team Plans -->
+    <div class="plans-grid hidden" id="team-grid">
+        <!-- Team -->
+        <div class="card recommended" id="card-team">
+            <div class="card-header">
+                <div class="card-title">Team</div>
+                <div class="capacity-hrs">Shared Pool</div>
+                <div class="capacity-min">Unlimited minutes</div>
+            </div>
+            <div class="price-section">
+                <div class="price-wrap">
+                    <span class="price" id="team-price-display">$100</span>
+                    <span class="price-period">/ mo total</span>
+                    <span class="savings-pill">Save 29%</span>
+                </div>
+                <div class="price-period" id="team-per-user-display">$20 / user / mo</div>
+                <div id="team-billed-today" style="font-size: 0.85rem; color: var(--text-muted); margin-top:8px;">Billed today: $1,200/year</div>
+            </div>
+            <button class="btn btn-secondary">Start Team Trial</button>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="card" id="card-enterprise">
+            <div class="card-header">
+                <div class="card-title">Enterprise & 10+ seats</div>
+                <div class="capacity-hrs">Custom pool</div>
+                <div class="capacity-min">Unlimited minutes</div>
+            </div>
+            <div class="price-section" style="display:flex; align-items:center;">
+                <div class="price" style="font-size: 1.5rem;">Custom Pricing</div>
+            </div>
+            <ul class="features">
+                <li>SSO & SCIM provisioning</li>
+                <li>Dedicated success manager</li>
+                <li>Custom data retention</li>
+            </ul>
+            <button class="btn btn-secondary" style="margin-top:auto;">Contact Sales</button>
+        </div>
+    </div>
+
+    <!-- Safety Cards -->
+    <div class="safety-grid" id="safety-cards">
+        <div class="safety-card">
+            <h3>What if I run out?</h3>
+            <p>Recording never stops when minutes run out, only transcription pauses. Minutes do not roll over.</p>
+            <div class="topup-chip">600 min for $12.99</div>
+        </div>
+        <div class="safety-card">
+            <h3>Change your mind anytime</h3>
+            <p>Cancelling keeps all your past recordings. Your account simply reverts to the Starter plan limits.</p>
+            <a href="#">Manage subscription →</a>
+        </div>
+        <div class="safety-card">
+            <h3>Your notes are never hostage</h3>
+            <p>We believe your data is yours. Export everything at any time, in open formats, even on the free plan.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>All prices in USD. Annual plans are billed once per year. Minutes reset at the beginning of each billing cycle.</p>
+    </footer>
+
+    <div id="plaud-attribution">Deepit Sapru · Made for Plaud AI</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const toggleAudienceBtns = document.querySelectorAll('#audience-toggle .toggle-btn');
+            const toggleBillingBtns = document.querySelectorAll('#billing-toggle .toggle-btn');
+            
+            const personalGrid = document.getElementById('personal-grid');
+            const teamGrid = document.getElementById('team-grid');
+            const sliderArea = document.getElementById('usage-slider-area');
+            const stepperArea = document.getElementById('team-stepper-area');
+            
+            const slider = document.getElementById('usage-slider');
+            const sliderValDisplay = document.getElementById('slider-val-display');
+            const sliderVerdict = document.getElementById('slider-verdict');
+            
+            const cardStarter = document.getElementById('card-starter');
+            const cardPro = document.getElementById('card-pro');
+            const cardUnlimited = document.getElementById('card-unlimited');
+            
+            const stepperMinus = document.getElementById('stepper-minus');
+            const stepperPlus = document.getElementById('stepper-plus');
+            const stepperInput = document.getElementById('stepper-input');
+            
+            const teamPriceDisplay = document.getElementById('team-price-display');
+            const teamPerUserDisplay = document.getElementById('team-per-user-display');
+            const teamBilledToday = document.getElementById('team-billed-today');
+
+            let isAnnual = true;
+            let isTeam = false;
+            let seats = 5;
+
+            // --- Toggle Logic ---
+            toggleAudienceBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    toggleAudienceBtns.forEach(b => b.classList.remove('active'));
+                    e.currentTarget.classList.add('active');
+                    isTeam = e.currentTarget.dataset.view === 'team';
+                    
+                    if(isTeam) {
+                        body.classList.add('team-active');
+                        personalGrid.classList.add('hidden');
+                        teamGrid.classList.remove('hidden');
+                    } else {
+                        body.classList.remove('team-active');
+                        personalGrid.classList.remove('hidden');
+                        teamGrid.classList.add('hidden');
+                    }
+                });
+            });
+
+            toggleBillingBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    toggleBillingBtns.forEach(b => b.classList.remove('active'));
+                    e.currentTarget.classList.add('active');
+                    isAnnual = e.currentTarget.dataset.billing === 'annual';
+                    
+                    if(isAnnual) {
+                        body.classList.add('annual-active');
+                    } else {
+                        body.classList.remove('annual-active');
+                    }
+                    
+                    updatePrices();
+                });
+            });
+
+            // --- Slider Logic ---
+            function updateRecommendation(val) {
+                const hrsMonth = Math.round(val * 4.33);
+                sliderValDisplay.textContent = `${val} hrs / week`;
+                
+                cardStarter.classList.remove('recommended');
+                cardPro.classList.remove('recommended');
+                cardUnlimited.classList.remove('recommended');
+
+                let recPlan = '';
+                if (hrsMonth < 5) {
+                    recPlan = 'Starter';
+                    cardStarter.classList.add('recommended');
+                } else if (hrsMonth >= 5 && hrsMonth <= 20) {
+                    recPlan = 'Pro';
+                    cardPro.classList.add('recommended');
+                } else {
+                    recPlan = 'Unlimited';
+                    cardUnlimited.classList.add('recommended');
+                }
+
+                sliderVerdict.textContent = `That's ~${hrsMonth} hrs/month → we'd recommend ${recPlan}`;
+            }
+
+            slider.addEventListener('input', (e) => {
+                updateRecommendation(e.target.value);
+            });
+            // Init slider
+            updateRecommendation(slider.value);
+
+            // --- Stepper Logic ---
+            function updateTeamPricing() {
+                // Monthly: $28/user, Annual: $20/user
+                const pricePerUser = isAnnual ? 20 : 28;
+                const totalMonthly = pricePerUser * seats;
+                
+                teamPriceDisplay.textContent = `$${totalMonthly}`;
+                teamPerUserDisplay.textContent = `$${pricePerUser} / user / mo`;
+                
+                if (isAnnual) {
+                    const totalAnnual = totalMonthly * 12;
+                    teamBilledToday.textContent = `Billed today: $${totalAnnual.toLocaleString()}/year`;
+                } else {
+                    teamBilledToday.textContent = `Billed today: $${totalMonthly.toLocaleString()}/month`; 
+                }
+            }
+
+            stepperMinus.addEventListener('click', () => {
+                if (seats > 2) {
+                    seats--;
+                    stepperInput.value = seats;
+                    updateTeamPricing();
+                }
+            });
+            stepperPlus.addEventListener('click', () => {
+                if (seats < 50) {
+                    seats++;
+                    stepperInput.value = seats;
+                    updateTeamPricing();
+                }
+            });
+            stepperInput.addEventListener('change', (e) => {
+                let val = parseInt(e.target.value);
+                if (isNaN(val) || val < 2) val = 2;
+                if (val > 50) val = 50;
+                seats = val;
+                e.target.value = seats;
+                updateTeamPricing();
+            });
+
+            // --- Update Prices function ---
+            function updatePrices() {
+                // Update personal plan texts based on billing
+                document.querySelectorAll('.price-section').forEach(section => {
+                    const priceSpan = section.querySelector('.price[data-monthly]');
+                    const billedToday = section.querySelector('.billed-today[data-monthly]');
+                    
+                    if (priceSpan && billedToday) {
+                        if (isAnnual) {
+                            priceSpan.textContent = priceSpan.dataset.annual;
+                            billedToday.textContent = billedToday.dataset.annual;
+                        } else {
+                            priceSpan.textContent = priceSpan.dataset.monthly;
+                            billedToday.textContent = billedToday.dataset.monthly;
+                        }
+                    }
+                });
+                
+                // Update team pricing
+                updateTeamPricing();
+            }
+
+            // Init prices
+            updatePrices();
+
+            // --- Persistent Attribution ---
+            const attributionHTML = 'Deepit Sapru · Made for Plaud AI';
+            const attrId = 'plaud-attribution';
+            
+            const observer = new MutationObserver((mutations) => {
+                let needsRestore = false;
+                mutations.forEach((mutation) => {
+                    mutation.removedNodes.forEach((node) => {
+                        if (node.id === attrId || node.contains?.(document.getElementById(attrId))) {
+                            needsRestore = true;
+                        }
+                    });
+                    if (mutation.type === 'attributes' && mutation.target.id === attrId) {
+                        const target = mutation.target;
+                        if (target.style.display === 'none' || target.style.visibility === 'hidden' || target.style.opacity === '0') {
+                            target.style.display = 'block';
+                            target.style.visibility = 'visible';
+                            target.style.opacity = '1';
+                        }
+                    }
+                });
+                
+                if (needsRestore && !document.getElementById(attrId)) {
+                    const el = document.createElement('div');
+                    el.id = attrId;
+                    el.innerHTML = attributionHTML;
+                    document.body.appendChild(el);
+                }
+            });
+            
+            observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+        });
+    </script>
+</body>
+</html>
